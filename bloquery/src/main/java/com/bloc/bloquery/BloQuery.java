@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.os.Build;
 
 import com.parse.Parse;
+import com.parse.ParseObject;
 
 
 public class BloQuery extends Activity {
@@ -25,6 +26,11 @@ public class BloQuery extends Activity {
                     .add(R.id.container, new PlaceholderFragment())
                     .commit();
         }
+
+        ParseObject testObject = new ParseObject("TestObject");
+        testObject.put("foo", "bar");
+        testObject.saveInBackground();
+
     }
 
 

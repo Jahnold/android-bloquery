@@ -11,7 +11,11 @@ public class BloQueryApplication extends Application {
         super.onCreate();
 
         // Initialize Parse
-        Parse.initialize(getApplicationContext(), getString(R.string.parse_app_id),
+        Parse.enableLocalDatastore(this);
+        Parse.initialize(
+                getApplicationContext(),
+                getString(R.string.parse_app_id),
                 getString(R.string.parse_client_key));
+
     }
 }
