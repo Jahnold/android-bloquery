@@ -11,8 +11,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.os.Build;
 
+import com.bloc.bloquery.Fragments.FeedFragment;
+import com.bloc.bloquery.Fragments.LogInFragment;
 import com.parse.Parse;
 import com.parse.ParseObject;
+import com.parse.ParseUser;
 
 
 public class BloQuery extends Activity {
@@ -22,14 +25,32 @@ public class BloQuery extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_blo_query);
         if (savedInstanceState == null) {
-            getFragmentManager().beginTransaction()
-                    .add(R.id.container, new PlaceholderFragment())
-                    .commit();
+
+            // check whether there is a logged in user
+            ParseUser user = ParseUser.getCurrentUser();
+            if (user != null) {
+
+                // show feed fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.container, new FeedFragment(), "FeedFragment")
+                        .commit();
+
+            }
+            else {
+
+                // no user, show login fragment
+                getFragmentManager()
+                        .beginTransaction()
+                        .add(R.id.container, new LogInFragment(), "LogInFragment")
+                        .commit();
+                
+            }
+
+
         }
 
-        ParseObject testObject = new ParseObject("TestObject");
-        testObject.put("foo", "bar");
-        testObject.saveInBackground();
+
 
     }
 
@@ -53,19 +74,5 @@ public class BloQuery extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
 
-        public PlaceholderFragment() {
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_blo_query, container, false);
-            return rootView;
-        }
-    }
 }
