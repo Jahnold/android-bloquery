@@ -63,13 +63,17 @@ public class RegisterFragment extends Fragment {
 
                             if (e == null) {
 
-                                // user created successfully
+                                // user created successfully, redirect to feed fragment
+                                getFragmentManager()
+                                        .beginTransaction()
+                                        .replace(R.id.container, new FeedFragment(), "FeedFragment")
+                                        .commit();
 
                             }
                             else {
 
                                 // something went wrong
-
+                                e.printStackTrace();
                             }
                         }
                     });

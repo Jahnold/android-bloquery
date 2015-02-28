@@ -68,11 +68,37 @@ public class BloQuery extends Activity {
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+
+        switch (id) {
+
+            case R.id.action_settings:
+                return true;
+
+            case R.id.action_logout:
+                logout();
+
+            default:
+                return super.onOptionsItemSelected(item);
+
         }
-        return super.onOptionsItemSelected(item);
     }
 
+    private void logout() {
+
+        // log out with parse
+        ParseUser.logOut();
+
+        LogInFragment logInFragment = (LogInFragment) getFragmentManager().findFragmentByTag("LogInFragment");
+
+        if (logInFragment == null) {
+            logInFragment = new LogInFragment();
+        }
+
+        // change to log in fragment
+        getFragmentManager()
+                .beginTransaction()
+                .replace(R.id.container,logInFragment, "LogInFragment")
+                .commit();
+    }
 
 }
