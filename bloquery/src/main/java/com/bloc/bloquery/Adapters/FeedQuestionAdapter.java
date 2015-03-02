@@ -1,6 +1,7 @@
 package com.bloc.bloquery.Adapters;
 
 import android.content.Context;
+import android.graphics.Paint;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -41,8 +42,17 @@ public class FeedQuestionAdapter extends ArrayAdapter<ParseObject> {
 
         if (question != null) {
 
-            TextView textView = (TextView) convertView.findViewById(R.id.txt_question);
-            textView.setText(question.getString("question"));
+            // get refs
+            TextView userTextView = (TextView) convertView.findViewById(R.id.txt_user);
+            TextView questionTextView = (TextView) convertView.findViewById(R.id.txt_question);
+
+            // extract user object
+            ParseObject user = question.getParseUser("user");
+
+            // set text view text
+            userTextView.setPaintFlags(userTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
+            userTextView.setText(user.getString("first_name") + " " + user.getString("last_name").substring(0,1));
+            questionTextView.setText(question.getString("question"));
 
         }
 

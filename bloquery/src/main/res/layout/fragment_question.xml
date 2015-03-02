@@ -12,17 +12,23 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="5dp"
-        android:textColor="#ff00357f" />
+        android:textColor="#ff00357f"
+        />
 
     <TextView
         android:id="@+id/txt_question"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_margin="10dp"
+        android:padding="10dp"
         android:background="#ff87d7ae"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginBottom="10dp"
-        android:padding="10dp" />
+        />
+
+    <ListView
+        android:id="@+id/list_answers"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        </ListView>
 
 </LinearLayout>

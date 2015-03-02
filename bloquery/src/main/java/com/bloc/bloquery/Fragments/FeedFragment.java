@@ -62,6 +62,7 @@ public class FeedFragment extends Fragment {
 
         // load the 20 most recent questions from parse
         ParseQuery<ParseObject> query = ParseQuery.getQuery("Question");
+        query.include("user");
         query.setLimit(20);
         query.findInBackground(new FindCallback<ParseObject>() {
             @Override
@@ -70,7 +71,8 @@ public class FeedFragment extends Fragment {
                 if (e == null) {
 
                     // success
-                    // add all the results to the feed array list
+                    // replace questions with the result
+                    mQuestions.clear();
                     mQuestions.addAll(parseObjects);
 
                     // update the adapter
@@ -98,6 +100,13 @@ public class FeedFragment extends Fragment {
                     questionFragment = new QuestionFragment();
                 }
 
+                // pass it our question then load it into view
+                questionFragment.setQuestion(question);
+                getFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.container, questionFragment, "QuestionFragment")
+                        .addToBackStack(null)
+                        .commit();
 
             }
         });
