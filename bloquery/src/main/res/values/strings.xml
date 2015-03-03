@@ -28,8 +28,12 @@
     <string name="btn_register">Register</string>
     <string name="btn_cancel">Cancel</string>
     <string name="btn_submit">Submit</string>
+    <string name="btn_save">Save</string>
 
     <string name="title_new_question">Ask New Question</string>
     <string name="title_new_answer">New Answer</string>
+
+    <string name="menu_profile_pic">Update Profile Picture</string>
+    <string name="menu_description">Edit Description</string>
 
 </resources>
