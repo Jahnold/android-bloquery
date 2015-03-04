@@ -54,7 +54,6 @@ public class AnswerAdapter extends ArrayAdapter<ParseObject> {
             ParseObject user = answer.getParseUser("user");
 
             // set the text
-            userTextView.setPaintFlags(userTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             userTextView.setText(user.getString("first_name") + " " + user.getString("last_name").substring(0,1));
             answerTextView.setText(answer.getString("answer"));
             pointsTextView.setText(String.valueOf(answer.getInt("points")));

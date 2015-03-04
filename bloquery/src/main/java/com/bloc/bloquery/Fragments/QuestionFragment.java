@@ -67,7 +67,6 @@ public class QuestionFragment extends Fragment {
             ParseObject user = mQuestion.getParseUser("user");
 
             // user and question text
-            userTextView.setPaintFlags(userTextView.getPaintFlags() | Paint.UNDERLINE_TEXT_FLAG);
             userTextView.setText(user.getString("first_name") + " " + user.getString("last_name").substring(0,1));
             questionTextView.setText(mQuestion.getString("question"));
 
@@ -83,6 +82,7 @@ public class QuestionFragment extends Fragment {
             ParseQuery<ParseObject> query = ParseQuery.getQuery("Answer");
             query.whereEqualTo("question", mQuestion);
             query.include("user");
+            query.orderByDescending("points");
             query.findInBackground(new FindCallback<ParseObject>() {
                 @Override
                 public void done(List<ParseObject> answers, ParseException e) {

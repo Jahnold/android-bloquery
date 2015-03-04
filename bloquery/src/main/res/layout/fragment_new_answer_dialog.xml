@@ -10,13 +10,15 @@
         android:id="@+id/et_new_answer"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:inputType="text"
-        android:imeOptions="actionDone"
+        android:inputType="text|textMultiLine"
         android:layout_marginTop="16dp"
         android:layout_marginLeft="6dp"
         android:layout_marginRight="6dp"
         android:layout_marginBottom="10dp"
         android:hint="@string/hint_answer"
-        android:minHeight="250dp" />
+        android:minHeight="250dp"
+        android:singleLine="false"
+        android:gravity="top"
+        />
 
 </LinearLayout>
