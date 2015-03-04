@@ -1,10 +1,14 @@
 package com.bloc.bloquery.Fragments;
 
 import android.app.Fragment;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,17 +17,21 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.bloc.bloquery.BloQuery;
 import com.bloc.bloquery.R;
+import com.bloc.bloquery.Views.SquareImageView;
 import com.parse.GetDataCallback;
 import com.parse.ParseException;
 import com.parse.ParseFile;
-import com.parse.ParseObject;
 import com.parse.ParseUser;
+import com.parse.SaveCallback;
+
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  *  Fragment to view user's profiles
@@ -31,12 +39,40 @@ import com.parse.ParseUser;
 public class ProfileViewFragment extends Fragment {
 
     private ParseUser mUser;
+    private SquareImageView mProfilePic;
 
     // empty constructor
     public ProfileViewFragment() {}
 
     // user setter
     public void setUser(ParseUser user) { mUser = user; }
+
+    private void setProfilePic(Bitmap pic) {
+
+        // create a parse file for the bitmap
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        pic.compress(Bitmap.CompressFormat.PNG, 100, stream);
+        final ParseFile profilePic = new ParseFile(mUser.getObjectId() + ".png", stream.toByteArray());
+        profilePic.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+
+                if (e == null) {
+
+                    // associate picture with user
+
+                    mUser.put("profile", profilePic);
+                    mUser.saveInBackground();
+
+                }
+                else { e.printStackTrace(); }
+            }
+        });
+
+        // update the image view
+        mProfilePic.setImageBitmap(pic);
+
+    }
 
     @Nullable
     @Override
@@ -47,7 +83,7 @@ public class ProfileViewFragment extends Fragment {
 
         TextView name = (TextView) v.findViewById(R.id.txt_name);
         final TextView desc = (TextView) v.findViewById(R.id.txt_description);
-        final ImageView profile = (ImageView) v.findViewById(R.id.image_profile);
+        mProfilePic = (SquareImageView) v.findViewById(R.id.image_profile);
         ImageButton menu = (ImageButton) v.findViewById(R.id.btn_edit_menu);
         final EditText editDesc = (EditText) v.findViewById(R.id.et_description);
         Button btnSave = (Button) v.findViewById(R.id.btn_save_description);
@@ -78,7 +114,7 @@ public class ProfileViewFragment extends Fragment {
                         if (e == null) {
 
                             Bitmap bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
-                            profile.setImageBitmap(bitmap);
+                            mProfilePic.setImageBitmap(bitmap);
 
                         }
                         else { e.printStackTrace(); }
@@ -89,7 +125,7 @@ public class ProfileViewFragment extends Fragment {
             else {
 
                 // no profile pic, set a generic
-                profile.setImageResource(R.drawable.noprofile);
+                mProfilePic.setImageResource(R.drawable.noprofile);
             }
 
             // menu
@@ -122,6 +158,12 @@ public class ProfileViewFragment extends Fragment {
                             case 0:
                                 // edit profile pic
                                 // start an intent to get a new picture
+                                Intent intent = new Intent(
+                                        Intent.ACTION_PICK,
+                                        MediaStore.Images.Media.EXTERNAL_CONTENT_URI
+                                );
+                                //intent.putExtra("session_token", mUser.getSessionToken());
+                                startActivityForResult(intent, 555);
                                 break;
 
                             case 1:
@@ -180,4 +222,27 @@ public class ProfileViewFragment extends Fragment {
 
         return v;
     }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == 555 && resultCode == BloQuery.RESULT_OK && data != null) {
+
+            // get the chosen image
+            Uri imageUri = data.getData();
+            Bitmap image = null;
+            try {
+
+                image = MediaStore.Images.Media.getBitmap(getActivity().getContentResolver(), imageUri);
+                Bitmap.createScaledBitmap(image, 500, 500, true);
+
+            } catch (IOException e) { e.printStackTrace(); }
+
+            setProfilePic(image);
+
+        }
+    }
+
 }

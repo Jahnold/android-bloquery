@@ -3,7 +3,11 @@ package com.bloc.bloquery;
 import android.app.Activity;
 import android.app.ActionBar;
 import android.app.Fragment;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -13,9 +17,13 @@ import android.os.Build;
 
 import com.bloc.bloquery.Fragments.FeedFragment;
 import com.bloc.bloquery.Fragments.LogInFragment;
+import com.bloc.bloquery.Fragments.ProfileViewFragment;
 import com.parse.Parse;
 import com.parse.ParseObject;
 import com.parse.ParseUser;
+
+import java.io.FileNotFoundException;
+import java.io.IOException;
 
 
 public class BloQuery extends Activity {
@@ -81,6 +89,13 @@ public class BloQuery extends Activity {
                 return super.onOptionsItemSelected(item);
 
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 
     private void logout() {
